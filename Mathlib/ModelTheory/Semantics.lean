@@ -1005,6 +1005,40 @@ theorem realize_iInf (s : Finset β) (f : β → L.BoundedFormula α n)
 
 end BoundedFormula
 
+theorem Hom.realize_atomicFormula (g : M →[L] N) {φ : L.BoundedFormula α n} (isAtomic : φ.IsAtomic)
+    {v : α → M} {xs : Fin n → M} : φ.Realize v xs → φ.Realize (g ∘ v) (g ∘ xs) := by
+  cases isAtomic
+  · simp only [BoundedFormula.Realize, ← Sum.comp_elim, Hom.realize_term]
+    intro h; congr 1
+  · simp only [BoundedFormula.Realize, ← Sum.comp_elim, Hom.realize_term]
+    apply g.map_rel
+
+namespace Embedding
+
+theorem realize_atomic_boundedFormula (g : M ↪[L] N) {φ : L.BoundedFormula α n}
+    (isAtomic : φ.IsAtomic) {v : α → M} {xs : Fin n → M} :
+    φ.Realize (g ∘ v) (g ∘ xs) ↔ φ.Realize v xs := by
+  cases isAtomic
+  · simp only [BoundedFormula.Realize, ← Sum.comp_elim, realize_term, g.injective.eq_iff]
+  · simp only [BoundedFormula.Realize, ← Sum.comp_elim, realize_term]
+    apply g.map_rel
+
+theorem realize_QF_boundedFormula (g : M ↪[L] N) {φ : L.BoundedFormula α n}
+    (isQF : φ.IsQF) {v : α → M} {xs : Fin n → M} :
+    φ.Realize (g ∘ v) (g ∘ xs) ↔ φ.Realize v xs := by
+  induction' isQF with _ h _ _ _ _ ih1 ih2
+  · rfl
+  · apply g.realize_atomic_boundedFormula; exact h
+  · simp only [BoundedFormula.Realize]
+    rw [ih1, ih2]
+
+theorem realize_QF_formula (g : M ↪[L] N) {φ : L.Formula α} (isQF : φ.IsQF) {v : α → M} :
+    φ.Realize (g ∘ v) ↔ φ.Realize v := by
+  simp only [Formula.Realize, ← Unique.eq_default (g ∘ default)]
+  exact g.realize_QF_boundedFormula isQF
+
+end Embedding
+
 namespace Equiv
 
 @[simp]
