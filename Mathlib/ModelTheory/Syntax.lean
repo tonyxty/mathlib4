@@ -722,6 +722,21 @@ theorem IsQF.not {φ : L.BoundedFormula α n} (h : IsQF φ) : IsQF φ.not :=
   h.imp isQF_bot
 #align first_order.language.bounded_formula.is_qf.not FirstOrder.Language.BoundedFormula.IsQF.not
 
+theorem IsQF_top : IsQF (⊤ : L.BoundedFormula α n) :=
+  isQF_bot.not
+
+theorem IsQF.inf {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ) : IsQF (φ ⊓ ψ) :=
+  (hφ.imp hψ.not).not
+
+theorem IsQF.sup {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ) : IsQF (φ ⊔ ψ) :=
+  hφ.not.imp hψ
+
+theorem isQF_iSup (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+    IsQF (iSup s f) := sorry
+
+theorem isQF_iInf (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+    IsQF (iInf s f) := sorry
+
 theorem IsQF.relabel {m : ℕ} {φ : L.BoundedFormula α m} (h : φ.IsQF) (f : α → Sum β (Fin n)) :
     (φ.relabel f).IsQF :=
   IsQF.recOn h isQF_bot (fun h => (h.relabel f).isQF) fun _ _ h1 h2 => h1.imp h2
