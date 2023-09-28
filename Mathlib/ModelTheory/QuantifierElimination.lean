@@ -31,18 +31,26 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
     rw [h.realize_iff _hM, h.realize_iff _hN, f.realize_QF_formula hQF, g.realize_QF_formula hQF]
   · intro h
     let ι := L.lhomWithConstants α
-    let T₁ := (ι.onTheory T).insert (Formula.equivSentence φ)
-    -- S is the set of quantifier free consequences of φ
+    let T₁ := (ι.onTheory T) ∪ {Formula.equivSentence φ}
+    -- S is the set of quantifier-free consequences of φ
     let S := { σ : L[[α]].Sentence | σ.IsQF ∧ T₁ ⊨ᵇ σ }
-    -- we show that T' := T ∪ S ∪ {¬φ} is not satisfiable
+    -- we show that T ∪ S ∪ {¬φ} is not satisfiable
     let T' : L[[α]].Theory := (ι.onTheory T) ∪ S
     have : ¬ Theory.IsSatisfiable (T' ∪ {∼(Formula.equivSentence φ)}) := sorry
-    obtain ⟨T₂, h', h⟩ := models_iff_finset_models.mp ((models_iff_not_satisfiable _).mpr this)
-    let ψ := BoundedFormula.iInf T₂ Formula.equivSentence.invFun
+    -- now let ψ be the conjunction of a finite subset of S that entails φ modulo T
+    obtain ⟨T₂, h', h⟩ :=
+      finset_models_of_union_models_right ((models_iff_not_satisfiable _).mpr this)
+    let ψ := BoundedFormula.iInf T₂ Formula.equivSentence.symm
     use ψ; constructor
     · apply BoundedFormula.isQF_iInf
+      intro σ hσ
+      apply BoundedFormula.IsQF.mapTermRel
+      apply BoundedFormula.IsQF.mapTermRel
+      exact (h' (Finset.mem_coe.mpr hσ)).left
+    · apply semanticallyEquivalent_of_realize_iff
+      intro M _ _ _ v
       sorry
-    · sorry
+
 
 def hasQE : Prop :=
   ∀ {α : Type w} (φ : L.Formula α), T.eliminatesQuantifier φ
