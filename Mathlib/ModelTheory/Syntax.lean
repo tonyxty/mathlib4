@@ -750,6 +750,15 @@ theorem IsQF.castLE {h : l ≤ n} (hφ : IsQF φ) : (φ.castLE h).IsQF :=
   IsQF.recOn hφ isQF_bot (fun ih => ih.castLE.isQF) fun _ _ ih1 ih2 => ih1.imp ih2
 #align first_order.language.bounded_formula.is_qf.cast_le FirstOrder.Language.BoundedFormula.IsQF.castLE
 
+theorem IsQF.mapTermRel {g : ℕ → ℕ}
+    (ft : ∀ n, L.Term (Sum α (Fin n)) → L'.Term (Sum β (Fin (g n))))
+    (fr : ∀ n, L.Relations n → L'.Relations n)
+    (h : ∀ n, L'.BoundedFormula β (g (n + 1)) → L'.BoundedFormula β (g n + 1))
+    {n} (φ : L.BoundedFormula α n) (isQF : φ.IsQF) : IsQF (φ.mapTermRel ft fr h) := sorry
+
+theorem IsQF.constantsVarsEquiv_iff (φ : L[[γ]].BoundedFormula α n) :
+    φ.IsQF ↔ (constantsVarsEquiv φ).IsQF := sorry
+
 theorem not_all_isQF (φ : L.BoundedFormula α (n + 1)) : ¬φ.all.IsQF := fun con => by
   cases' con with _ con
   exact φ.not_all_isAtomic con
@@ -1074,6 +1083,8 @@ theorem isAtomic_graph (f : L.Functions n) : (graph f).IsAtomic :=
 def equivSentence : L.Formula α ≃ L[[α]].Sentence :=
   (BoundedFormula.constantsVarsEquiv.trans (BoundedFormula.relabelEquiv (Equiv.sumEmpty _ _))).symm
 #align first_order.language.formula.equiv_sentence FirstOrder.Language.Formula.equivSentence
+
+def IsQF.equivSentence (φ : L.Formula α) : φ.IsQF ↔ (equivSentence φ).IsQF := sorry
 
 theorem equivSentence_not (φ : L.Formula α) : equivSentence φ.not = (equivSentence φ).not :=
   rfl
