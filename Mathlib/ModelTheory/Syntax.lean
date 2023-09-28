@@ -722,7 +722,7 @@ theorem IsQF.not {φ : L.BoundedFormula α n} (h : IsQF φ) : IsQF φ.not :=
   h.imp isQF_bot
 #align first_order.language.bounded_formula.is_qf.not FirstOrder.Language.BoundedFormula.IsQF.not
 
-theorem IsQF_top : IsQF (⊤ : L.BoundedFormula α n) :=
+theorem isQF_top : IsQF (⊤ : L.BoundedFormula α n) :=
   isQF_bot.not
 
 theorem IsQF.inf {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ) : IsQF (φ ⊓ ψ) :=
@@ -731,11 +731,35 @@ theorem IsQF.inf {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ)
 theorem IsQF.sup {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ) : IsQF (φ ⊔ ψ) :=
   hφ.not.imp hψ
 
-theorem isQF_iSup (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
-    IsQF (iSup s f) := sorry
+theorem isQF_foldr_inf (l : List (L.BoundedFormula α n)) (h : ∀ φ ∈ l, IsQF φ) :
+    IsQF (l.foldr (· ⊓ ·) ⊤) := by
+  induction' l with φ l ih
+  · exact isQF_top
+  · obtain ⟨hφ, h⟩ := List.forall_mem_cons.mp h
+    exact hφ.inf (ih h)
 
-theorem isQF_iInf (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
-    IsQF (iInf s f) := sorry
+theorem isQF_iInf [DecidableEq β] (s : Finset β)
+    (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+    IsQF (iInf s f) := by
+  apply isQF_foldr_inf
+  refine' List.forall_mem_map_iff.mpr _
+  simp
+  exact h
+
+theorem isQF_foldr_sup (l : List (L.BoundedFormula α n)) (h : ∀ φ ∈ l, IsQF φ) :
+    IsQF (l.foldr (· ⊔ ·) ⊥) := by
+  induction' l with φ l ih
+  · exact isQF_bot
+  · obtain ⟨hφ, h⟩ := List.forall_mem_cons.mp h
+    exact hφ.sup (ih h)
+
+theorem isQF_iSup [DecidableEq β] (s : Finset β)
+    (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+    IsQF (iSup s f) := by
+  apply isQF_foldr_sup
+  refine' List.forall_mem_map_iff.mpr _
+  simp
+  exact h
 
 theorem IsQF.relabel {m : ℕ} {φ : L.BoundedFormula α m} (h : φ.IsQF) (f : α → Sum β (Fin n)) :
     (φ.relabel f).IsQF :=
