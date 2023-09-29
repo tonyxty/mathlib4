@@ -379,6 +379,24 @@ theorem models_iff_finset_models {φ : L.Sentence} :
     exact IsSatisfiable.mono (h (T0.erase (Formula.not φ))
       (by simpa using hT0)) (by simp)
 
+theorem models_mono {T' : L.Theory} {φ : L.Sentence} (h : T ⊨ᵇ φ) (hsub : T ⊆ T') : T' ⊨ᵇ φ :=
+  (models_iff_not_satisfiable φ).mpr
+    fun h' => (models_iff_not_satisfiable φ).mp h (h'.mono (Set.union_subset_union_left _ hsub))
+
+theorem finset_models_of_union_models_right {T' : L.Theory} {φ : L.Sentence} (h : T ∪ T' ⊨ᵇ φ) :
+    ∃ T₀ : Finset L.Sentence, ↑T₀ ⊆ T' ∧ T ∪ T₀ ⊨ᵇ φ := by
+  obtain ⟨T₁, hsub, h₁⟩ := models_iff_finset_models.mp h
+  have := Classical.decPred (· ∈ T')
+  use T₁.filter (· ∈ T')
+  simp [Finset.coe_filter]
+  constructor
+  · exact Set.inter_subset_right _ _
+  · apply models_mono h₁
+    intro σ hσ
+    by_cases σ ∈ T'
+    · exact Set.mem_union_right _ ⟨Finset.mem_coe.mp hσ, h⟩
+    · exact Or.elim (hsub hσ) (Set.mem_union_left _) (fun h' => False.elim (h h'))
+
 /-- A theory is complete when it is satisfiable and models each sentence or its negation. -/
 def IsComplete (T : L.Theory) : Prop :=
   T.IsSatisfiable ∧ ∀ φ : L.Sentence, T ⊨ᵇ φ ∨ T ⊨ᵇ φ.not
