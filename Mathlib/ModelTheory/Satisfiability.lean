@@ -490,10 +490,22 @@ theorem SemanticallyEquivalent.realize_bd_iff {φ ψ : L.BoundedFormula α n} {M
   BoundedFormula.realize_iff.1 (h (ModelType.of T M) v xs)
 #align first_order.language.Theory.semantically_equivalent.realize_bd_iff FirstOrder.Language.Theory.SemanticallyEquivalent.realize_bd_iff
 
+theorem semanticallyEquivalent_of_realize_bd_iff {φ ψ : L.BoundedFormula α n}
+    (h : ∀ {M : Type max u v} [Nonempty M] [L.Structure M] [T.Model M]
+    {v : α → M} {xs : Fin n → M}, φ.Realize v xs ↔ ψ.Realize v xs) :
+    T.SemanticallyEquivalent φ ψ :=
+  fun _ _ _ => BoundedFormula.realize_iff.mpr h
+
 theorem SemanticallyEquivalent.realize_iff {φ ψ : L.Formula α} {M : Type max u v} [Nonempty M]
     [L.Structure M] (_hM : T.Model M) (h : T.SemanticallyEquivalent φ ψ) {v : α → M} :
     φ.Realize v ↔ ψ.Realize v :=
   h.realize_bd_iff
+
+theorem semanticallyEquivalent_of_realize_iff {φ ψ : L.Formula α} (h : ∀ {M : Type max u v}
+    [Nonempty M] [L.Structure M] [T.Model M] {v : α → M}, φ.Realize v ↔ ψ.Realize v) :
+    T.SemanticallyEquivalent φ ψ :=
+  fun _ _ => Unique.forall_iff.mpr (Formula.realize_iff.mpr h)
+
 #align first_order.language.Theory.semantically_equivalent.realize_iff FirstOrder.Language.Theory.SemanticallyEquivalent.realize_iff
 
 /-- Semantic equivalence forms an equivalence relation on formulas. -/
