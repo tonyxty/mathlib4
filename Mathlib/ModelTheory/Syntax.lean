@@ -745,8 +745,7 @@ theorem isQF_foldr_inf (l : List (L.BoundedFormula α n)) (h : ∀ φ ∈ l, IsQ
   · obtain ⟨hφ, h⟩ := List.forall_mem_cons.mp h
     exact hφ.inf (ih h)
 
-theorem isQF_iInf [DecidableEq β] (s : Finset β)
-    (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+theorem isQF_iInf (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
     IsQF (iInf s f) := by
   apply isQF_foldr_inf
   refine' List.forall_mem_map_iff.mpr _
@@ -760,8 +759,7 @@ theorem isQF_foldr_sup (l : List (L.BoundedFormula α n)) (h : ∀ φ ∈ l, IsQ
   · obtain ⟨hφ, h⟩ := List.forall_mem_cons.mp h
     exact hφ.sup (ih h)
 
-theorem isQF_iSup [DecidableEq β] (s : Finset β)
-    (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
+theorem isQF_iSup (s : Finset β) (f : β → L.BoundedFormula α n) (h : ∀ i ∈ s, IsQF (f i)) :
     IsQF (iSup s f) := by
   apply isQF_foldr_sup
   refine' List.forall_mem_map_iff.mpr _
@@ -789,7 +787,7 @@ theorem IsQF.mapTermRel {g : ℕ → ℕ}
   IsQF.recOn isQF IsQF.falsum (fun h' => IsQF.of_isAtomic (h'.mapTermRel ft fr h _))
     fun _ _ ih1 ih2 => ih1.imp ih2
 
-theorem isQF_constantsVarsEquiv_iff {φ : L[[γ]].BoundedFormula α n} :
+theorem isQF_constantsVarsEquiv_iff (φ : L[[γ]].BoundedFormula α n) :
     φ.IsQF ↔ (constantsVarsEquiv φ).IsQF := by
   constructor
   · apply IsQF.mapTermRel
