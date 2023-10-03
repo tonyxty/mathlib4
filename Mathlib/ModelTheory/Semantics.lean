@@ -755,6 +755,11 @@ theorem realize_equivSentence_symm (φ : L[[α]].Sentence) (v : α → M) :
   realize_equivSentence_symm_con M φ
 #align first_order.language.formula.realize_equiv_sentence_symm FirstOrder.Language.Formula.realize_equivSentence_symm
 
+theorem realize_equivSentence' (φ : L.Formula α) (v : α → M) :
+    @Sentence.Realize _ M (@Language.withConstantsStructure L M _ α (constantsOn.structure v))
+    (equivSentence φ) ↔ φ.Realize v := by
+  rw [← realize_equivSentence_symm M (equivSentence φ) v, _root_.Equiv.symm_apply_apply]
+
 end Formula
 
 @[simp]
