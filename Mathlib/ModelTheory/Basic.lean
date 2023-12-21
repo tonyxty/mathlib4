@@ -781,6 +781,11 @@ def StrongHomClass.toEmbedding {F M N} [L.Structure M] [L.Structure N] [FunLike 
   ⟨⟨φ, EmbeddingLike.injective φ⟩, StrongHomClass.map_fun φ, StrongHomClass.map_rel φ⟩
 #align first_order.language.strong_hom_class.to_embedding FirstOrder.Language.StrongHomClass.toEmbedding
 
+@[simp]
+theorem StrongHomClass.coe_toEmbedding {F M N} [L.Structure M] [L.Structure N]
+    [EmbeddingLike F M N] [StrongHomClass L F M N] (f : F) :
+    (StrongHomClass.toEmbedding f : M → N) = (f : M → N) := rfl
+
 namespace Equiv
 
 instance : EquivLike (M ≃[L] N) M N where

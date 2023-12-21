@@ -38,25 +38,26 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
     have : ¬ Theory.IsSatisfiable (T' ∪ {∼(Formula.equivSentence φ)}) := by
       intro ⟨M⟩
       let A : L[[α]].Substructure M := Substructure.closure (L[[α]]) ∅
-      let _ := ι.reduct A
-      have D := L[[α]].completeTheory A
+      letI _ := ι.reduct A
+      let D := L[[α]].completeQFTheory A
       have : IsSatisfiable (ι.onTheory T ∪ D ∪ {Formula.equivSentence φ}) := sorry
       obtain ⟨N⟩ := this
-      have : ι.IsExpansionOn M := sorry
-      have : ι.IsExpansionOn N := sorry
+      have : ι.IsExpansionOn M := LHom.isExpansionOn_reduct _ _
+      have : ι.IsExpansionOn N := LHom.isExpansionOn_reduct _ _
       have : M ⊨ T := (ι.onTheory_model T).mp
         (M.is_model.mono (Set.subset_union_of_subset_left (Set.subset_union_left _ _) _))
       have : N ⊨ T := (ι.onTheory_model T).mp
         (N.is_model.mono (Set.subset_union_of_subset_left (Set.subset_union_left _ _) _))
-      have i : A ↪[L] M := sorry
-      have j : A ↪[L] N := sorry
+      have i : A ↪[L[[α]]] M := A.subtype
+      have j : A ↪[L[[α]]] N := sorry
       have : ¬M ⊨ Formula.equivSentence φ := (Sentence.realize_not _).mp
         (M.is_model.realize_of_mem _ (Set.mem_union_right _ (Set.mem_singleton _)))
       apply this
-      have := h i j (fun d => L.con d)
-      have i_con : i ∘ (fun d => L.con d) = fun d : α => (L.con d : M) := sorry
-      have j_con : j ∘ (fun d => L.con d) = fun d : α => (L.con d : N) := sorry
-      rw [i_con, ← φ.realize_equivSentence M, j_con, ← φ.realize_equivSentence N] at this
+      have := h (ι.reduct_Embedding i) (ι.reduct_Embedding j) (fun d => L.con d)
+      have i_con : i ∘ (fun d => L.con d) = fun d : α => (L.con d : M) := by ext; simp
+      have j_con : j ∘ (fun d => L.con d) = fun d : α => (L.con d : N) := by ext; simp
+      rw [ι.coe_reduct_toEmbedding i, i_con, ← φ.realize_equivSentence M] at this
+      rw [ι.coe_reduct_toEmbedding j, j_con, ← φ.realize_equivSentence N] at this
       rw [this]
       exact (N.is_model.realize_of_mem _ (Set.mem_union_right _ (Set.mem_singleton _)))
     -- now let ψ be the conjunction of a finite subset of S that entails φ modulo T
@@ -87,7 +88,7 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
           apply (Formula.realize_equivSentence_symm M σ v).mp
           have := h'' σ hσ
           rw [Unique.eq_default xs] at this
-          apply Unique.forall_iff.mpr this
+          exact Unique.forall_iff.mpr this _
         exact models_sentence_iff.mp h' (ModelType.of (ι.onTheory T ∪ T₁) M)
 
 def hasQE : Prop :=

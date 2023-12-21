@@ -776,6 +776,9 @@ def completeTheory : L.Theory :=
   { φ | M ⊨ φ }
 #align first_order.language.complete_theory FirstOrder.Language.completeTheory
 
+def completeQFTheory : L.Theory :=
+  { φ | M ⊨ φ ∧ φ.IsQF }
+
 variable (N)
 
 /-- Two structures are elementarily equivalent when they satisfy the same sentences. -/
@@ -1041,6 +1044,17 @@ theorem realize_QF_formula (g : M ↪[L] N) {φ : L.Formula α} (isQF : φ.IsQF)
     φ.Realize (g ∘ v) ↔ φ.Realize v := by
   simp only [Formula.Realize, ← Unique.eq_default (g ∘ default)]
   exact g.realize_QF_boundedFormula isQF
+
+theorem realize_QF_sentence (g : M ↪[L] N) {φ : L.Sentence} (isQF : φ.IsQF) : N ⊨ φ ↔ M ⊨ φ := by
+  simp only [Sentence.Realize, ← Unique.eq_default (↑g ∘ default)]
+  exact g.realize_QF_formula isQF
+
+def of_realize_QF_formula (g : M → N) (h : ∀ {α} {φ : L.Formula α} (isQF : φ.IsQF) {v : α → M},
+    φ.Realize (g ∘ v) ↔ φ.Realize v) : M ↪[L] N where
+  toFun := g
+  inj' := sorry
+  map_fun' := sorry
+  map_rel' := sorry
 
 end Embedding
 
