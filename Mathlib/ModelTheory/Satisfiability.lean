@@ -393,9 +393,9 @@ theorem finset_models_of_union_models_right {T' : L.Theory} {φ : L.Sentence} (h
   · exact Set.inter_subset_right _ _
   · apply models_mono h₁
     intro σ hσ
-    by_cases σ ∈ T'
-    · exact Set.mem_union_right _ ⟨Finset.mem_coe.mp hσ, h⟩
-    · exact Or.elim (hsub hσ) (Set.mem_union_left _) (fun h' => False.elim (h h'))
+    by_cases hT' : σ ∈ T'
+    · exact Set.mem_union_right _ ⟨Finset.mem_coe.mp hσ, hT'⟩
+    · exact Or.elim (hsub hσ) (Set.mem_union_left _) (fun h' => False.elim (hT' h'))
 
 /-- A theory is complete when it is satisfiable and models each sentence or its negation. -/
 def IsComplete (T : L.Theory) : Prop :=

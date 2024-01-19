@@ -78,14 +78,14 @@ def reduct (M : Type*) [L'.Structure M] : L.Structure M where
   RelMap r xs := RelMap (ϕ.onRelation r) xs
 #align first_order.language.Lhom.reduct FirstOrder.Language.LHom.reduct
 
-theorem reduct_HomClass {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M (fun _ => N)]
+theorem reduct_HomClass {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M N]
     [L'.HomClass F M N] : @HomClass L F M N _ (ϕ.reduct M) (ϕ.reduct N) :=
   @HomClass.mk L F M N _ (ϕ.reduct M) (ϕ.reduct N)
   (fun _ _ _ _ => @HomClass.map_fun L' F M N _ _ _ _ _ _ _ _)
   (fun _ _ _ _ => @HomClass.map_rel L' F M N _ _ _ _ _ _ _ _)
 
-theorem reduct_StrongHomClass {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M (fun _ => N)]
-    [L'.StrongHomClass F M N] : @StrongHomClass L F M N _ (ϕ.reduct M) (ϕ.reduct N) :=
+theorem reduct_StrongHomClass {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M N] [L'.StrongHomClass F M N] :
+    @StrongHomClass L F M N _ (ϕ.reduct M) (ϕ.reduct N) :=
   @StrongHomClass.mk L F M N _ (ϕ.reduct M) (ϕ.reduct N)
   (fun _ _ _ _ => @StrongHomClass.map_fun L' F M N _ _ _ _ _ _ _ _)
   (fun _ _ _ _ => @StrongHomClass.map_rel L' F M N _ _ _ _ _ _ _ _)
