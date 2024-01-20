@@ -17,11 +17,11 @@ variable (_hM : T.Model M) (_hN : T.Model N)
 
 namespace Theory
 
-def eliminatesQuantifier (φ : L.Formula α) : Prop :=
+def EliminatesQuantifier (φ : L.Formula α) : Prop :=
   ∃ ψ, ψ.IsQF ∧ T.SemanticallyEquivalent φ ψ
 
 theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α} :
-    T.eliminatesQuantifier φ ↔
+    T.EliminatesQuantifier φ ↔
     (∀ {A : Type max u v} {M N : Type max u v} [L.Structure A] [Nonempty M] [Nonempty N]
       [L.Structure M] [L.Structure N] [T.Model M] [T.Model N]
       (f : A ↪[L] M) (g : A ↪[L] N) (v : α → A),
@@ -91,14 +91,14 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
           exact Unique.forall_iff.mpr this _
         exact models_sentence_iff.mp h' (ModelType.of (ι.onTheory T ∪ T₁) M)
 
-def hasQE : Prop :=
-  ∀ {α : Type max u v} (φ : L.Formula α), T.eliminatesQuantifier φ
+def HasQE : Prop :=
+  ∀ {α : Type max u v} (φ : L.Formula α), T.EliminatesQuantifier φ
 
 end Theory
 
 namespace Embedding
 
-variable (hQE : T.hasQE)
+variable (hQE : T.HasQE)
 
 theorem isElementry_of_hasQE (f : M ↪[L] N) :
     ∀ {n} (φ : L.Formula (ULift.{max u v} (Fin n))) (v : ULift.{max u v} (Fin n) → M),

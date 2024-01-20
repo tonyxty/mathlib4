@@ -3108,6 +3108,7 @@ import Mathlib.ModelTheory.Fraisse
 import Mathlib.ModelTheory.Graph
 import Mathlib.ModelTheory.LanguageMap
 import Mathlib.ModelTheory.Order
+import Mathlib.ModelTheory.QuantifierElimination
 import Mathlib.ModelTheory.Quotients
 import Mathlib.ModelTheory.Satisfiability
 import Mathlib.ModelTheory.Semantics
