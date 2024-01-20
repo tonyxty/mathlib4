@@ -1049,12 +1049,39 @@ theorem realize_QF_sentence (g : M ↪[L] N) {φ : L.Sentence} (isQF : φ.IsQF) 
   simp only [Sentence.Realize, ← Unique.eq_default (↑g ∘ default)]
   exact g.realize_QF_formula isQF
 
-def of_realize_QF_formula (g : M → N) (h : ∀ {α} {φ : L.Formula α} (isQF : φ.IsQF) {v : α → M},
+def of_realize_QF_formula (g : M → N) (h : ∀ {α} {φ : L.Formula α} (_ : φ.IsQF) (v : α → M),
     φ.Realize (g ∘ v) ↔ φ.Realize v) : M ↪[L] N where
   toFun := g
-  inj' := sorry
-  map_fun' := sorry
-  map_rel' := sorry
+  inj' := by
+    let φ : L.Formula (Fin 2) := Term.equal (.var 0) (.var 1)
+    have isQF : φ.IsQF := .of_isAtomic (.equal _ _)
+    intro x₀ x₁
+    let v : Fin 2 → M := ![x₀, x₁]
+    exact (h isQF v).mp
+  map_fun' := by
+    intro n f
+    let t : L.Term (Fin n) := Term.func f Term.var
+    let φ : L.Formula (Fin (n + 1)) := Term.equal (t.relabel Fin.castSucc) (.var n)
+    have isQF : φ.IsQF := .of_isAtomic (.equal _ _)
+    intro xs
+    dsimp
+    set y := funMap f xs
+    let v : Fin (n + 1) → M := Fin.snoc xs y
+    have : Formula.Realize φ v := by
+      dsimp
+      unfold Formula.Realize BoundedFormula.Realize Term.equal Term.bdEqual
+      dsimp; simp
+    have := (h isQF v).mpr this
+    dsimp at this
+    unfold Formula.Realize BoundedFormula.Realize Term.equal Term.bdEqual at this
+    dsimp at this; simp at this
+    symm
+    exact this
+  map_rel' := by
+    intro n r
+    let φ : L.Formula (Fin n) := r.boundedFormula (Term.var ∘ Sum.inl)
+    have isQF : φ.IsQF := .of_isAtomic (.rel _ _)
+    exact h isQF
 
 end Embedding
 
