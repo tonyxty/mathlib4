@@ -1127,11 +1127,10 @@ def isQF_equivSentence (φ : L.Formula α) : φ.IsQF ↔ (equivSentence φ).IsQF
     apply BoundedFormula.IsQF.mapTermRel
     exact h
   · set f := BoundedFormula.constantsVarsEquiv.trans
-      (BoundedFormula.relabelEquiv (Equiv.sumEmpty α Empty)) with hf
+      (BoundedFormula.relabelEquiv (Equiv.sumEmpty α Empty))
     intro h
     rw [← f.apply_symm_apply (x := φ)]
     generalize (f.symm φ) = ψ at h
-    dsimp [hf, BoundedFormula.relabelEquiv]
     apply BoundedFormula.IsQF.mapTermRel
     apply BoundedFormula.IsQF.mapTermRel
     exact h

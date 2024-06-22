@@ -90,11 +90,11 @@ theorem reduct_StrongHomClass {F M N} [L'.Structure M] [L'.Structure N] [FunLike
   (fun _ _ _ _ => @StrongHomClass.map_fun L' F M N _ _ _ _ _ _ _ _)
   (fun _ _ _ _ => @StrongHomClass.map_rel L' F M N _ _ _ _ _ _ _ _)
 
-def reduct_Embedding {F M N} [L'.Structure M] [L'.Structure N] [EmbeddingLike F M N]
+def reduct_Embedding {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M N] [EmbeddingLike F M N]
     [L'.StrongHomClass F M N] : F → @Embedding L M N (ϕ.reduct M) (ϕ.reduct N) :=
-  @StrongHomClass.toEmbedding L F M N (ϕ.reduct M) (ϕ.reduct N) _ (reduct_StrongHomClass ϕ)
+  @StrongHomClass.toEmbedding L F M N (ϕ.reduct M) (ϕ.reduct N) _ _ (reduct_StrongHomClass ϕ)
 
-theorem coe_reduct_toEmbedding {F M N} [L'.Structure M] [L'.Structure N] [EmbeddingLike F M N]
+theorem coe_reduct_toEmbedding {F M N} [L'.Structure M] [L'.Structure N] [FunLike F M N] [EmbeddingLike F M N]
     [L'.StrongHomClass F M N] (f : F) : (ϕ.reduct_Embedding f : M → N) = (f : M → N) :=
   StrongHomClass.coe_toEmbedding f
 

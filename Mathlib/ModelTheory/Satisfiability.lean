@@ -390,7 +390,7 @@ theorem finset_models_of_union_models_right {T' : L.Theory} {φ : L.Sentence} (h
   use T₁.filter (· ∈ T')
   simp [Finset.coe_filter]
   constructor
-  · exact Set.inter_subset_right _ _
+  · exact Set.inter_subset_right
   · apply models_mono h₁
     intro σ hσ
     by_cases hT' : σ ∈ T'

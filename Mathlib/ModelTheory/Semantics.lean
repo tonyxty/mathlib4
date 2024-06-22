@@ -1068,13 +1068,13 @@ def of_realize_QF_formula (g : M → N) (h : ∀ {α} {φ : L.Formula α} (_ : �
     set y := funMap f xs
     let v : Fin (n + 1) → M := Fin.snoc xs y
     have : Formula.Realize φ v := by
-      dsimp
+      dsimp [φ, v]
       unfold Formula.Realize BoundedFormula.Realize Term.equal Term.bdEqual
-      dsimp; simp
+      simp
     have := (h isQF v).mpr this
-    dsimp at this
+    dsimp [φ, v] at this
     unfold Formula.Realize BoundedFormula.Realize Term.equal Term.bdEqual at this
-    dsimp at this; simp at this
+    simp at this
     symm
     exact this
   map_rel' := by

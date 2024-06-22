@@ -45,9 +45,9 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
       have : ι.IsExpansionOn M := LHom.isExpansionOn_reduct _ _
       have : ι.IsExpansionOn N := LHom.isExpansionOn_reduct _ _
       have : M ⊨ T := (ι.onTheory_model T).mp
-        (M.is_model.mono (Set.subset_union_of_subset_left (Set.subset_union_left _ _) _))
+        (M.is_model.mono (Set.subset_union_of_subset_left Set.subset_union_left _))
       have : N ⊨ T := (ι.onTheory_model T).mp
-        (N.is_model.mono (Set.subset_union_of_subset_left (Set.subset_union_left _ _) _))
+        (N.is_model.mono (Set.subset_union_of_subset_left Set.subset_union_left _))
       have i : A ↪[L[[α]]] M := A.subtype
       have j : A ↪[L[[α]]] N := sorry
       have : ¬M ⊨ Formula.equivSentence φ := (Sentence.realize_not _).mp
@@ -71,7 +71,7 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
       apply BoundedFormula.IsQF.mapTermRel
       obtain ⟨σ', hσ', rfl⟩ := hsub (Finset.mem_coe.mpr hσ)
       exact (Formula.isQF_equivSentence σ').mp hσ'.left
-    · intro M v xs; simp
+    · intro M v xs; dsimp [ψ]; simp
       constructor
       · intro hφ _ hσ
         obtain ⟨_, hσ', rfl⟩ := hsub (Finset.mem_coe.mpr hσ)

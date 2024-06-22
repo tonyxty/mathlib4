@@ -783,7 +783,7 @@ def StrongHomClass.toEmbedding {F M N} [L.Structure M] [L.Structure N] [FunLike 
 
 @[simp]
 theorem StrongHomClass.coe_toEmbedding {F M N} [L.Structure M] [L.Structure N]
-    [EmbeddingLike F M N] [StrongHomClass L F M N] (f : F) :
+    [FunLike F M N] [EmbeddingLike F M N] [StrongHomClass L F M N] (f : F) :
     (StrongHomClass.toEmbedding f : M → N) = (f : M → N) := rfl
 
 namespace Equiv
