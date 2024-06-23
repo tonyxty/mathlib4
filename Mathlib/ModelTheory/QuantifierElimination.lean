@@ -38,7 +38,7 @@ theorem eliminatesQuantifier_iff_realize_common_substructure {φ : L.Formula α}
     have : ¬ Theory.IsSatisfiable (T' ∪ {∼(Formula.equivSentence φ)}) := by
       intro ⟨M⟩
       let A : L[[α]].Substructure M := Substructure.closure (L[[α]]) ∅
-      letI _ := ι.reduct A
+      let _ := ι.reduct A
       let D := L[[α]].completeQFTheory A
       have : IsSatisfiable (ι.onTheory T ∪ D ∪ {Formula.equivSentence φ}) := sorry
       obtain ⟨N⟩ := this
